@@ -1,6 +1,6 @@
 # DNS Server
 
-This project is a simple DNS server implemented in TypeScript. It's designed to be a learning tool for understanding the DNS protocol.
+A DNS server implemented in TypeScript. It's designed to be a learning tool for understanding the DNS protocol.
 
 ## Features
 
