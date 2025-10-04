@@ -39,7 +39,7 @@ This project is a simple DNS server implemented in TypeScript. It's designed to 
     npm run start
     ```
 
-The DNS server will be listening on port `2053`.
+The DNS server will be listening on port `8080`.
 
 ### Development
 
@@ -52,7 +52,7 @@ npm run dev
 You can test the DNS server using a command-line tool like `dig`.
 
 ```bash
-dig @127.0.0.1 -p 2053 google.com
+dig @127.0.0.1 -p 8080 google.com
 ```
 
 This command will send a DNS query for `google.com` to your local DNS server running on port `2053`. The server will then forward the query to Google's public DNS server and return the response to you.

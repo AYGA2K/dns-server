@@ -53,7 +53,7 @@ export function createDnsServer() {
   });
 
   server.on("listening", () => {
-    console.log("DNS server listening on port 2053");
+    console.log("DNS server listening on port 8080");
   });
 
   return server;
@@ -61,5 +61,7 @@ export function createDnsServer() {
 
 export function startDnsServer() {
   const server = createDnsServer();
-  server.bind(2053);
+  server.bind(8080);
 }
+
+startDnsServer();

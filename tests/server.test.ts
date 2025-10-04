@@ -5,7 +5,7 @@ import { parseDNSHeader, parseDNSQuestions, parseDNSAnswers } from "../src/parse
 import type { DnsHeader, DnsQuestion } from "../src/types";
 
 describe("DNS Server", () => {
-  const PORT = 2053;
+  const PORT = 8080;
   const HOST = "127.0.0.1";
   let server: dgram.Socket;
 
