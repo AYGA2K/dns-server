@@ -59,7 +59,7 @@ export function createDnsServer() {
   return server;
 }
 
-export function startDnsServer() {
+function startDnsServer() {
   const server = createDnsServer();
   server.bind(8080);
 }

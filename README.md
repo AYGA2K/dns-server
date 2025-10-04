@@ -5,7 +5,7 @@ A DNS server implemented in TypeScript. It's designed to be a learning tool for 
 ## Features
 
 * **DNS Forwarding:** The server acts as a DNS forwarder. It receives DNS queries and forwards them to an upstream resolver (e.g., Google's `8.8.8.8`) to get the answers.
-* **UDP-based:** The server communicates using the UDP protocol, which is the standard for most DNS queries.
+* **UDP-based:** The server communicates using the UDP protocol.
 * **Binary Protocol Parsing:** The project includes code for parsing and building DNS packets according to the RFC 1035 specification. This includes handling the DNS header, questions, and answers, as well as domain name compression.
 
 ## Getting Started
