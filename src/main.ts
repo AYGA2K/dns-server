@@ -1,7 +1,7 @@
 import dgram from "dgram";
 import { parseDNSHeader, parseDNSQuestions, parseDNSAnswers } from "./parser";
 import { buildDNSHeader, buildQuestionSection, buildAnswerSection } from "./builder";
-import type { DnsAnswer, DnsHeader, DnsQuestion } from "./types";
+import type { DnsAnswer, DnsHeader } from "./types";
 import { forwardQuery } from "./forwarder";
 
 const RESOLVER_ADDRESS = "8.8.8.8:53";
@@ -13,12 +13,14 @@ export function createDnsServer() {
     try {
       const [resolverIp, resolverPort] = RESOLVER_ADDRESS.split(":");
 
+      // Parse the incoming DNS message.
       const incomingHeader = parseDNSHeader(msg);
       const { questions } = parseDNSQuestions(msg, 12, incomingHeader.qdcount);
 
       const allAnswers: DnsAnswer[] = [];
       let responseHeader: DnsHeader | null = null;
 
+      // Forward each question to the resolver and collect the answers.
       for (const question of questions) {
         const response = await forwardQuery(resolverIp, Number(resolverPort), incomingHeader, [question]);
         const resHeader = parseDNSHeader(response);
@@ -30,11 +32,12 @@ export function createDnsServer() {
         allAnswers.push(...answers);
       }
 
+      // Build and send the final response to the client.
       if (responseHeader) {
         const finalHeader: DnsHeader = {
           ...responseHeader,
-          packetId: incomingHeader.packetId,
-          qr: 1,
+          packetId: incomingHeader.packetId, // Use the original packet ID
+          qr: 1, // This is a response
           qdcount: questions.length,
           ancount: allAnswers.length,
         };

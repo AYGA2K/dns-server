@@ -1,5 +1,9 @@
 import type { DnsAnswer, DnsHeader, DnsQuestion } from "./types";
 
+// Encodes a domain name into the DNS format.
+// For example, "google.com" becomes "\x06google\x03com\x00".
+// Each label is prefixed with its length. The name is terminated with a null byte.
+// Read more here: https://www.rfc-editor.org/rfc/rfc1035#section-3.1
 function encodeDomainName(name: string): Buffer {
   const parts = name.split(".");
   const buffers = parts.map(label => {
@@ -10,11 +14,15 @@ function encodeDomainName(name: string): Buffer {
   return Buffer.concat([...buffers, Buffer.alloc(1)]);
 }
 
+// Builds a DNS header from a DnsHeader object.
+// Read more here: https://www.rfc-editor.org/rfc/rfc1035#section-4.1.1
 export function buildDNSHeader(header: DnsHeader, qdcount: number, ancount: number): Buffer {
   const buf = Buffer.alloc(12);
 
+  // Write Packet ID
   buf.writeUInt16BE(header.packetId, 0);
 
+  // Write Flags
   let flags = 0;
   flags |= header.qr << 15;
   flags |= header.opcode << 11;
@@ -27,6 +35,7 @@ export function buildDNSHeader(header: DnsHeader, qdcount: number, ancount: numb
 
   buf.writeUInt16BE(flags, 2);
 
+  // Write Counts
   buf.writeUInt16BE(qdcount, 4);
   buf.writeUInt16BE(ancount, 6);
   buf.writeUInt16BE(header.nscount, 8);
@@ -35,7 +44,8 @@ export function buildDNSHeader(header: DnsHeader, qdcount: number, ancount: numb
   return buf;
 }
 
-
+// Builds the question section of a DNS message.
+// Read more here: https://www.rfc-editor.org/rfc/rfc1035#section-4.1.2
 export function buildQuestionSection(questions: DnsQuestion[]): Buffer {
   return Buffer.concat(
     questions.map(q => {
@@ -48,6 +58,8 @@ export function buildQuestionSection(questions: DnsQuestion[]): Buffer {
   );
 }
 
+// Builds the answer section of a DNS message.
+// Read more here: https://www.rfc-editor.org/rfc/rfc1035#section-4.1.3
 export function buildAnswerSection(answers: DnsAnswer[]): Buffer {
   return Buffer.concat(
     answers.map(a => {
